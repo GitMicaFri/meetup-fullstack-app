@@ -18,12 +18,12 @@ jobs:
         with:
           node-version: "18"
 
-      - name: Change directory to frontend
-        working-directory: ./frontend
+      - name: Install dependencies
+        working-directory: frontend
         run: npm install
 
       - name: Build the app
-        working-directory: ./frontend
+        working-directory: frontend
         run: npm run build
 
       - name: Deploy to S3
