@@ -19,11 +19,11 @@ jobs:
           node-version: "18"
 
       - name: Install dependencies
-        working-directory: frontend
+        working-directory: Frontend
         run: npm install
 
       - name: Build the app
-        working-directory: frontend
+        working-directory: Frontend
         run: npm run build
 
       - name: Deploy to S3
