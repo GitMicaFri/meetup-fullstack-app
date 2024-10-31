@@ -1,8 +1,8 @@
 const express = require('express')
+const { createUser } = require('../controllers/userController') 
 const router = express.Router()
 
-router.get('/test', (req, res) => {
-    res.json({ message: 'Backend running on AWS Lambda'})
-})
+router.post('/users/register', createUser)
+
 
 module.exports = router
