@@ -4,8 +4,11 @@ provider:
   name: aws
   runtime: nodejs18.x
   region: eu-north-1
+  environment:
+    USERS_TABLE: Meetup-Users
+    MEETUPS_TABLE: Meetups
   iamRoleStatements:
-    - Effect: Allow
+    - Effect: "Allow"
       Action:
         - dynamodb:GetItem
         - dynamodb:PutItem
@@ -20,60 +23,8 @@ provider:
 
 functions:
   createAccount:
-    handler: meetupapi/functions/createAccount.handler
+    handler: functions/createAccount.handler
     events:
       - http:
           path: users/create
           method: post
-
-  cancelMeetup:
-    handler: meetupapi/functions/cancelMeetup.handler
-    events:
-      - http:
-          path: meetups/cancel
-          method: post
-
-  getAllMeetups:
-    handler: meetupapi/functions/getAllMeetups.handler
-    events:
-      - http:
-          path: meetups
-          method: get
-
-  getAllUsers:
-    handler: meetupapi/functions/getAllUsers.handler
-    events:
-      - http:
-          path: users
-          method: get
-
-  getMeetupByKeyword:
-    handler: meetupapi/functions/getMeetupByKeyword.handler
-    events:
-      - http:
-          path: meetups/search
-          method: get
-
-  getMeetupInfoById:
-    handler: meetupapi/functions/getMeetupInfoById.handler
-    events:
-      - http:
-          path: meetups/{id}
-          method: get
-
-  loginAccount:
-    handler: meetupapi/functions/loginAccount.handler
-    events:
-      - http:
-          path: users/login
-          method: post
-
-  registerMeetup:
-    handler: meetupapi/functions/registerMeetup.handler
-    events:
-      - http:
-          path: meetups/register
-          method: post
-
-plugins:
-  - serverless-dotenv-plugin
