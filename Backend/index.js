@@ -13,5 +13,11 @@ app.use('/api', apiRoutes)
 
 
 
-
-module.exports.handler = serverless(app)
+module.exports.handler = serverless(app, {
+    request(request, event) {
+        console.log("Received event:", JSON.stringify(event));
+        if (event.version === '2.0' && typeof event.body === 'string') {
+            request.body = JSON.parse(event.body)
+        }
+    }
+})
