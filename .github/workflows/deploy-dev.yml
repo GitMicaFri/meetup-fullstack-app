@@ -25,17 +25,11 @@ jobs:
         working-directory: Frontend
         run: npm run build
 
-      - name: Install or Update AWS CLI
+      - name: Install AWS CLI
         run: |
-          if ! command -v aws &> /dev/null; then
-            echo "AWS CLI is not installed. Installing..."
-            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-            unzip awscliv2.zip
-            sudo ./aws/install
-          else
-            echo "AWS CLI is already installed. Updating..."
-            sudo ./aws/install --update
-          fi
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install
 
       - name: Deploy to S3 Dev
         env:
