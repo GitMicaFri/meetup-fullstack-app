@@ -1,7 +1,3 @@
-const bcrypt = require('bcryptjs')
-const { v4: uuidv4 } = require('uuid')
-const dynamoDB = require('../db')
-
 exports.createUser = async (req, res) => {
     console.log("Request body:", req.body)
 

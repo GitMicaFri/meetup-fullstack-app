@@ -1,40 +1,51 @@
-name: Deploy to Dev Environment
+name: Deploy to S3
 
 on:
-  push:
-    branches:
-      - dev
+    push:
+        branches:
+            - main
+            - dev
 
 jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Check out code
+              uses: actions/checkout@v2
 
-    steps:
-      - name: Check out the code
-        uses: actions/checkout@v2
+            - name: Set up Node.js
+              uses: actions/setup-node@v2
+              with:
+                  node-version: '18' # Uppdaterad till Node.js version 18
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: "18"
+            - name: Install dependencies
+              run: npm install
 
-      - name: Install dependencies
-        working-directory: Frontend
-        run: npm install
+            - name: Build project
+              run: npm run build
 
-      - name: Build the app
-        working-directory: Frontend
-        run: npm run build
+            - name: Install AWS CLI
+              run: |
+                  curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+                  unzip awscliv2.zip
+                  sudo ./aws/install
 
-      - name: Install AWS CLI
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y awscli
+            - name: Deploy to S3
+              if: github.ref == 'refs/heads/main'
+              env:
+                  AWS_REGION: eu-north-1 # Uppdaterad till regionen eu-north-1
+                  AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET_MAIN }}
+                  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+              run: |
+                  aws s3 sync build/ s3://$AWS_S3_BUCKET --delete
 
-      - name: Deploy to S3 using AWS CLI
-        run: |
-          aws s3 sync Frontend/dist s3://${{ secrets.AWS_DEV_BUCKET }} --delete
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: "eu-north-1"
+            - name: Deploy to S3 Dev
+              if: github.ref == 'refs/heads/dev'
+              env:
+                  AWS_REGION: eu-north-1 # Uppdaterad till regionen eu-north-1
+                  AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET_DEV }}
+                  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+              run: |
+                  aws s3 sync build/ s3://$AWS_S3_BUCKET --delete
