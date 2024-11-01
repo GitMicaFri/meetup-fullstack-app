@@ -1,5 +1,5 @@
 exports.createUser = async (req, res) => {
-    console.log("Request body:", req.body)
+    console.log("Request body!:", req.body)
 
     const { firstName, lastName, email, password } = req.body
 
