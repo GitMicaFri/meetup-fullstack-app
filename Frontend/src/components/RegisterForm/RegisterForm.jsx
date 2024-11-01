@@ -2,7 +2,7 @@ const RegisterForm = () => {
   return (
     <div className="container">
       <div>
-        <h1 className="title">Fullstack Meetups!</h1>
+        <h1 className="title">Fullstack Meetups</h1>
       </div>
 
       <section className="section">
