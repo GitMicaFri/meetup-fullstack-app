@@ -18,9 +18,11 @@ jobs:
           node-version: "18" # Uppdaterad till Node.js version 18
 
       - name: Install dependencies
+        working-directory: Frontend
         run: npm install
 
       - name: Build project
+        working-directory: Frontend
         run: npm run build
 
       - name: Install AWS CLI
