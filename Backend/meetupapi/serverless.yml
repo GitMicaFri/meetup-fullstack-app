@@ -36,3 +36,10 @@ functions:
       - http:
           path: dev/users/loginAccount
           method: post
+
+  getAllUsers:
+    handler: functions/getAllUsers.handler
+    events:
+      - http:
+          path: dev/users
+          method: get
