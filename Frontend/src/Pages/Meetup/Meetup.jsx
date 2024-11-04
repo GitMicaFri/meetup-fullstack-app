@@ -1,28 +1,24 @@
-import { useNavigate } from "react-router-dom"
+//import { useNavigate } from "react-router-dom"
 import "./Meetup.css"
 
 const Meetup = () => {
-    const navigate = useNavigate()
-
-
-
+    //const navigate = useNavigate()
 
         return(
-            <>
-                <div class="topnav">
-                    <h1 className="Rubrik">Mina Sidor</h1>
+            <main>
+                <div className="topnav">
+                    <h1 className="title">Mina Sidor</h1>
                     <input
                     type="text"
                     placeholder="Sök nya meetups..."
                     />
-                    <button type="submit"><i classname="search"></i>Sök</button>
-
+                    <button className="btn" type="submit">Sök</button>
                 </div>
 
                 <div className="Meetcontainer">
-                <h1 className="name">Mina Meetups</h1>
+                    <h1 className="subtitle">Mina Meetups</h1>
                 </div>
-            </>
+            </main>
         )
 }
 

@@ -4,16 +4,10 @@ import Form from "../../components/Form/Form";
 const Landing = () => {
 
     return(
-
         <div className="container">
+            <h1 className="title">Fullstack Meetups</h1>
 
-             <div>
-                <h1 className="title">Fullstack Meetups</h1>
-             </div>
-
-             <Form />
-
-
+            <Form />
         </div>
     )   
 }

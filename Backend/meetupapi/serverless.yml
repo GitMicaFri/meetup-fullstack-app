@@ -1,0 +1,78 @@
+service: meetup-backend-api
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: eu-north-1
+  environment:
+    MEETUPS_TABLE: Meetups
+    USERS_TABLE: Meetup-Users
+    AWS_REGION: eu-north-1
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:PutItem"
+        - "dynamodb:UpdateItem"
+        - "dynamodb:GetItem"
+        - "dynamodb:DeleteItem"
+        - "dynamodb:Scan"
+      Resource:
+        - "arn:aws:dynamodb:eu-north-1:*:table/Meetup-Users"
+        - "arn:aws:dynamodb:eu-north-1:*:table/Meetups"
+
+functions:
+  cancelMeetup:
+    handler: meetupapi/functions/cancelMeetup.handler
+    events:
+      - http:
+          path: meetups/cancel
+          method: post
+
+  createAccount:
+    handler: meetupapi/functions/createAccount.handler
+    events:
+      - http:
+          path: users/create
+          method: post
+
+  getAllMeetups:
+    handler: meetupapi/functions/getAllMeetups.handler
+    events:
+      - http:
+          path: meetups
+          method: get
+
+  getAllUsers:
+    handler: meetupapi/functions/getAllUsers.handler
+    events:
+      - http:
+          path: users
+          method: get
+
+  getMeetupByKeyword:
+    handler: meetupapi/functions/getMeetupByKeyword.handler
+    events:
+      - http:
+          path: meetups/search
+          method: get
+
+  getMeetupInfoById:
+    handler: meetupapi/functions/getMeetupInfoById.handler
+    events:
+      - http:
+          path: meetups/{id}
+          method: get
+
+  loginAccount:
+    handler: meetupapi/functions/loginAccount.handler
+    events:
+      - http:
+          path: users/login
+          method: post
+
+  registerMeetup:
+    handler: meetupapi/functions/registerMeetup.handler
+    events:
+      - http:
+          path: meetups/register
+          method: post
