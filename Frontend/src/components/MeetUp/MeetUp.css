@@ -1,0 +1,14 @@
+
+.meet-box {
+    background-color: #fff;
+    border-radius: 5px;
+    width: 15rem;
+    padding: 1rem;
+}
+.button-register {
+    padding: .5rem 2rem;
+    background-color: #bbbaba;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

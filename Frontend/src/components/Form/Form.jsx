@@ -7,6 +7,9 @@ const Form = () => {
   function handleClick() {
     navigate("/register")
   }
+  function login() {
+    navigate("/portal")
+  }
 
   return (
 
@@ -25,7 +28,7 @@ const Form = () => {
             Inget konto? Registrera dig här!
           </p>
 
-          <button className="button">Logga in</button>
+          <button className="button" onClick={login}>Logga in</button>
         </div>
       </section>
   )
