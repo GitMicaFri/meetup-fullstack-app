@@ -19,6 +19,7 @@ provider:
         - dynamodb:DescribeTable
       Resource:
         - arn:aws:dynamodb:eu-north-1:*:table/Meetup-Users
+        - arn:aws:dynamodb:eu-north-1:*:table/Meetup-Users/index/EmailIndex
         - arn:aws:dynamodb:eu-north-1:*:table/Meetups
 
 functions:
@@ -26,5 +27,12 @@ functions:
     handler: functions/createAccount.handler
     events:
       - http:
-          path: users/create
+          path: dev/users/createAccount
+          method: post
+
+  loginAccount:
+    handler: functions/loginAccount.handler
+    events:
+      - http:
+          path: dev/users/loginAccount
           method: post
