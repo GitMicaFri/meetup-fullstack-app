@@ -1,6 +1,7 @@
 service: meetup-backend-api
 
 provider:
+<<<<<<< HEAD
     name: aws
     runtime: nodejs18.x
     region: eu-north-1
@@ -28,3 +29,40 @@ functions:
             - http:
                   path: dev/users/createAccount
                   method: post
+=======
+  name: aws
+  runtime: nodejs18.x
+  region: eu-north-1
+  environment:
+    USERS_TABLE: Meetup-Users
+    MEETUPS_TABLE: Meetups
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:Scan
+        - dynamodb:Query
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+        - dynamodb:DescribeTable
+      Resource:
+        - arn:aws:dynamodb:eu-north-1:*:table/Meetup-Users
+        - arn:aws:dynamodb:eu-north-1:*:table/Meetup-Users/index/EmailIndex
+        - arn:aws:dynamodb:eu-north-1:*:table/Meetups
+
+functions:
+  createAccount:
+    handler: functions/createAccount.handler
+    events:
+      - http:
+          path: dev/users/createAccount
+          method: post
+
+  loginAccount:
+    handler: functions/loginAccount.handler
+    events:
+      - http:
+          path: dev/users/loginAccount
+          method: post
+>>>>>>> 855207322dbc8168ca6d55839db49e399f82b487
