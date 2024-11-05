@@ -1,45 +1,66 @@
 service: meetup-backend-api
 
 provider:
-  name: aws
-  runtime: nodejs18.x
-  region: eu-north-1
-  environment:
-    USERS_TABLE: Meetup-Users
-    MEETUPS_TABLE: Meetups
-  iamRoleStatements:
-    - Effect: "Allow"
-      Action:
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:Scan
-        - dynamodb:Query
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
-        - dynamodb:DescribeTable
-      Resource:
-        - arn:aws:dynamodb:eu-north-1:*:table/Meetup-Users
-        - arn:aws:dynamodb:eu-north-1:*:table/Meetup-Users/index/EmailIndex
-        - arn:aws:dynamodb:eu-north-1:*:table/Meetups
+    name: aws
+    runtime: nodejs18.x
+    region: eu-north-1
+    environment:
+        USERS_TABLE: Meetup-Users
+        MEETUPS_TABLE: Meetups
+    iamRoleStatements:
+        - Effect: 'Allow'
+          Action:
+              - dynamodb:GetItem
+              - dynamodb:PutItem
+              - dynamodb:Scan
+              - dynamodb:Query
+              - dynamodb:UpdateItem
+              - dynamodb:DeleteItem
+              - dynamodb:DescribeTable
+          Resource:
+              - arn:aws:dynamodb:eu-north-1:*:table/Meetup-Users
+              - arn:aws:dynamodb:eu-north-1:*:table/Meetup-Users/index/EmailIndex
+              - arn:aws:dynamodb:eu-north-1:*:table/Meetups
 
 functions:
-  createAccount:
-    handler: functions/createAccount.handler
-    events:
-      - http:
-          path: dev/users/createAccount
-          method: post
+    createAccount:
+        handler: functions/createAccount.handler
+        events:
+            - http:
+                  path: dev/users/createAccount
+                  method: post
 
-  loginAccount:
-    handler: functions/loginAccount.handler
-    events:
-      - http:
-          path: dev/users/loginAccount
-          method: post
+    loginAccount:
+        handler: functions/loginAccount.handler
+        events:
+            - http:
+                  path: dev/users/loginAccount
+                  method: post
 
-  getAllUsers:
-    handler: functions/getAllUsers.handler
-    events:
-      - http:
-          path: dev/users
-          method: get
+    getAllUsers:
+        handler: functions/getAllUsers.handler
+        events:
+            - http:
+                  path: dev/users
+                  method: get
+
+    createMeetup:
+        handler: functions/createMeetup.handler
+        events:
+            - http:
+                  path: dev/meetups
+                  method: post
+
+    getAllMeetups:
+        handler: functions/getAllMeetups.handler
+        events:
+            - http:
+                  path: dev/meetups
+                  method: get
+
+    registerForMeetup:
+        handler: functions/registerForMeetup.handler
+        events:
+            - http:
+                  path: dev/meetups/{meetupId}/register
+                  method: post
