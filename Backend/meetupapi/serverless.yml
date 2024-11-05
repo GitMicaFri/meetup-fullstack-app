@@ -82,3 +82,10 @@ functions:
                       parameters:
                           querystrings:
                               keyword: true
+
+    cancelMeetup:
+        handler: functions/cancelMeetup.handler
+        events:
+            - http:
+                  path: dev/meetups/cancel
+                  method: post
