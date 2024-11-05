@@ -64,3 +64,21 @@ functions:
             - http:
                   path: dev/meetups/{meetupId}/register
                   method: post
+
+    getMeetupInfoById:
+        handler: functions/getMeetupInfoById.handler
+        events:
+            - http:
+                  path: dev/meetups/{meetupId}
+                  method: get
+
+    getMeetupByKeyword:
+        handler: functions/getMeetupByKeyword.handler
+        events:
+            - http:
+                  path: dev/meetups/search
+                  method: get
+                  request:
+                      parameters:
+                          querystrings:
+                              keyword: true
