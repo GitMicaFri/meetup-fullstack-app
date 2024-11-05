@@ -1,4 +1,4 @@
-// Importerar nödvändiga bibliotek och dynamoDB-instansen
+// Importerar DynamoDB-instansen från db.js
 const dynamoDB = require('../db');
 
 // Huvudfunktionen för att registrera en användare till ett meetup-event
@@ -8,57 +8,82 @@ module.exports.handler = async (event) => {
     try {
         // Tolkar inkommande JSON-data från anropet
         const data = JSON.parse(event.body);
-        console.log('Parsed data:', data); // Loggar den tolkade datan
+        const { meetupId, userId } = data;
 
-        // Kontroll för att säkerställa att obligatoriska fält är ifyllda
-        if (!data.meetupId || !data.userId) {
+        // Kontroll för att säkerställa att både meetupId och userId är ifyllda
+        if (!meetupId || !userId) {
             return {
                 statusCode: 400,
                 body: JSON.stringify({
-                    error: 'Meetup ID and User ID are required fields',
+                    error: 'Missing required fields (meetupId and userId)',
                 }),
             };
         }
 
-        // Parametrar för att uppdatera deltagarlistan i meetups-tabellen
-        const params = {
+        // Parametrar för att hämta meetup-information från DynamoDB
+        const meetupParams = {
             TableName: 'Meetups',
-            Key: {
-                id: data.meetupId,
-            },
-            UpdateExpression:
-                'SET attendees = list_append(if_not_exists(attendees, :emptyList), :user)',
-            ExpressionAttributeValues: {
-                ':user': [data.userId],
-                ':emptyList': [],
-            },
-            ReturnValues: 'UPDATED_NEW',
+            Key: { id: meetupId },
         };
 
-        console.log('UpdateItem params:', params); // Loggar parametrarna för att uppdatera deltagarlistan
+        // Hämtar meetup-data från DynamoDB
+        const meetupResult = await dynamoDB.get(meetupParams).promise();
 
-        // Uppdaterar meetup-data med ny deltagare i DynamoDB
-        const result = await dynamoDB.update(params).promise();
-        console.log('Update result:', result); // Loggar resultatet från DynamoDB
+        // Kontroll för att säkerställa att meetup finns
+        if (!meetupResult.Item) {
+            return {
+                statusCode: 404,
+                body: JSON.stringify({ error: 'Meetup not found' }),
+            };
+        }
 
-        // Bekräftar att registrering har lyckats
+        // Kontrollera om användaren redan är registrerad
+        const attendees = meetupResult.Item.attendees || [];
+        if (attendees.includes(userId)) {
+            return {
+                statusCode: 400,
+                body: JSON.stringify({ message: 'User already registered' }),
+            };
+        }
+
+        // Försöker att lägga till användaren till meetup med villkoret att max 5 användare tillåts
+        const updateParams = {
+            TableName: 'Meetups',
+            Key: { id: meetupId },
+            UpdateExpression: 'SET attendees = list_append(attendees, :userId)',
+            ConditionExpression: 'size(attendees) < :maxSize',
+            ExpressionAttributeValues: {
+                ':userId': [userId], // Användar-ID som ska läggas till i attendees-listan
+                ':maxSize': 5, // Maximalt antal deltagare för ett meetup
+            },
+            ReturnValues: 'UPDATED_NEW', // Returnerar den uppdaterade listan av deltagare
+        };
+
+        // Försöker att uppdatera listan av deltagare för meetups
+        await dynamoDB.update(updateParams).promise();
+
+        // Om registreringen lyckas, returnera en framgångssvar
         return {
-            statusCode: 200,
+            statusCode: 201,
             body: JSON.stringify({
                 message: 'User registered for meetup successfully',
-                meetupId: data.meetupId,
-                userId: data.userId,
             }),
         };
     } catch (error) {
-        console.error('Error:', error); // Loggar eventuella fel som uppstår
+        // Kontroll för att se om felet beror på att meetup är fullt
+        if (error.name === 'ConditionalCheckFailedException') {
+            return {
+                statusCode: 403,
+                body: JSON.stringify({
+                    message: 'Meetup is full. Registration not allowed.',
+                }),
+            };
+        }
 
-        // Returnerar ett felmeddelande vid serverfel
+        console.error('Error:', error); // Loggar eventuella andra fel
         return {
             statusCode: 500,
-            body: JSON.stringify({
-                error: error.message,
-            }),
+            body: JSON.stringify({ error: error.message }),
         };
     }
 };
