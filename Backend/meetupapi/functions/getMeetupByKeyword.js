@@ -1,4 +1,3 @@
-// Importerar dynamoDB-instansen
 const dynamoDB = require('../db');
 
 // Huvudfunktionen för att hämta meetups baserat på ett sökord

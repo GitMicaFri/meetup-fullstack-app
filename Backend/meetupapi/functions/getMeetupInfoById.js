@@ -1,4 +1,3 @@
-// Importerar dynamoDB-instansen och andra nödvändiga bibliotek
 const dynamoDB = require('../db');
 
 // Huvudfunktionen för att hämta information om en specifik meetup

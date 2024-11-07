@@ -1,4 +1,3 @@
-// Importerar dynamoDB-klienten
 const dynamoDB = require('../db');
 
 // Huvudfunktionen för att avregistrera en användare från en meetup

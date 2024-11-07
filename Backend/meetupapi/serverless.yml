@@ -27,56 +27,56 @@ functions:
         handler: functions/createAccount.handler
         events:
             - http:
-                  path: dev/users/createAccount
+                  path: users/createAccount
                   method: post
 
     loginAccount:
         handler: functions/loginAccount.handler
         events:
             - http:
-                  path: dev/users/loginAccount
+                  path: users/loginAccount
                   method: post
 
     getAllUsers:
         handler: functions/getAllUsers.handler
         events:
             - http:
-                  path: dev/users
+                  path: users
                   method: get
 
     createMeetup:
         handler: functions/createMeetup.handler
         events:
             - http:
-                  path: dev/meetups
+                  path: meetups
                   method: post
 
     getAllMeetups:
         handler: functions/getAllMeetups.handler
         events:
             - http:
-                  path: dev/meetups
+                  path: meetups
                   method: get
 
     registerForMeetup:
         handler: functions/registerForMeetup.handler
         events:
             - http:
-                  path: dev/meetups/{meetupId}/register
+                  path: meetups/{meetupId}/register
                   method: post
 
     getMeetupInfoById:
         handler: functions/getMeetupInfoById.handler
         events:
             - http:
-                  path: dev/meetups/{meetupId}
+                  path: meetups/{meetupId}
                   method: get
 
     getMeetupByKeyword:
         handler: functions/getMeetupByKeyword.handler
         events:
             - http:
-                  path: dev/meetups/search
+                  path: meetups/search
                   method: get
                   request:
                       parameters:
@@ -87,5 +87,16 @@ functions:
         handler: functions/cancelMeetup.handler
         events:
             - http:
-                  path: dev/meetups/cancel
+                  path: meetups/cancel
                   method: post
+
+    myProfile:
+        handler: functions/myProfile.handler
+        events:
+            - http:
+                  path: users/profile
+                  method: get
+                  request:
+                      parameters:
+                          querystrings:
+                              userId: true

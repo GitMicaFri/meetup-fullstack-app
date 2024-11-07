@@ -1,4 +1,3 @@
-// Importerar nödvändiga bibliotek och instanser för dynamoDB och unika ID:n
 const dynamoDB = require('../db');
 const { v4: uuidv4 } = require('uuid');
 

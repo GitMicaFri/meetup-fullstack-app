@@ -1,4 +1,3 @@
-// Importerar DynamoDB-instansen från db.js
 const dynamoDB = require('../db');
 
 // Huvudfunktionen för att registrera en användare till ett meetup-event
@@ -29,7 +28,7 @@ module.exports.handler = async (event) => {
         // Hämtar meetup-data från DynamoDB
         const meetupResult = await dynamoDB.get(meetupParams).promise();
 
-        // Kontroll för att säkerställa att meetup finns
+        // Kontrollera att meetup finns
         if (!meetupResult.Item) {
             return {
                 statusCode: 404,
