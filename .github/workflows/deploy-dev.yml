@@ -25,11 +25,18 @@ jobs:
         working-directory: Frontend
         run: npm run build
 
-      - name: Install AWS CLI
+      - name: Check and install AWS CLI
         run: |
-          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-          unzip awscliv2.zip
-          sudo ./aws/install
+          if ! command -v aws &> /dev/null; then
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+          else
+            echo "AWS CLI already installed, updating..."
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install --update
+          fi
 
       - name: Deploy to S3 Dev
         if: github.ref == 'refs/heads/dev'
@@ -41,7 +48,7 @@ jobs:
         run: |
           aws s3 sync Frontend/build/ s3://$AWS_S3_BUCKET --delete
 
-      - name: Deploy to S3
+      - name: Deploy to S3 Prod
         if: github.ref == 'refs/heads/main'
         env:
           AWS_REGION: eu-north-1 # Uppdaterad till regionen eu-north-1
