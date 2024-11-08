@@ -7,12 +7,11 @@ const Form = () => {
   function handleClick() {
     navigate("/register")
   }
+  function login() {
+    navigate("/portal")
+  }
 
   return (
-    <div className="container">
-      <div>
-        <h1 className="title">Fullstack Meetups!!!</h1>
-      </div>
 
       <section className="section">
         <h2 className="subtitle">Logga in</h2>
@@ -29,10 +28,9 @@ const Form = () => {
             Inget konto? Registrera dig här!
           </p>
 
-          <button className="button">Logga in</button>
+          <button className="button" onClick={login}>Logga in</button>
         </div>
       </section>
-    </div>
   )
 }
 
