@@ -1,0 +1,32 @@
+.meetup-box {
+    background-color: #e9ecef;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .meetup-box:hover {
+    transform: translateY(-5px);
+  }
+  
+  .meetup-title {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .register-btn {
+    margin-top: 1rem;
+    padding: 0.5rem 1.5rem;
+    background-color: #007bff;
+    border: none;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .register-btn:hover {
+    background-color: #0056b3;
+  }
+  
