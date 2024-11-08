@@ -1,30 +1,32 @@
-import { useNavigate } from 'react-router-dom';
-import '../MeetUp/MeetUp.css';
+import { useNavigate } from "react-router-dom"
+import "../MeetUp/MeetUp.css"
 
 const MeetUp = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate()
 
-    function handleClick() {
-        navigate("/register")
-    }
+  function handleClick() {
+    navigate("/register")
+  }
 
-    let maxGuest;
+  let maxGuest
 
-    return(
-        <main>
-            <section className="meet-box">
-                <h3>Vad mötet heter</h3>
-                <p>Här är en stor beskrivning av detta mötet!!</p>
-                <p>Datum:</p>
-                <p>Tid:</p>
-                <p>Plats:</p>
-                <p>Värd:</p>
+  return (
+    <main>
+      <section className="meet-box">
+        <h3>Vad mötet heter</h3>
+        <p>Här är en stor beskrivning av detta mötet!!</p>
+        <p>Titel:</p>
+        <p>Datum:</p>
+        <p>Plats:</p>
+        <p>Beskrivning:</p>
 
-                {/* If statement på knappen ifall användaren är anmäld eller ej. */}
-                <button className='button-register' onClick={handleClick}>{maxGuest ? 'Fullbokat' : 'Anmäl dig här'}</button>
-            </section>
-        </main>
-    )
+        {/* If statement på knappen ifall användaren är anmäld eller ej. */}
+        <button className="button-register" onClick={handleClick}>
+          {maxGuest ? "Fullbokat" : "Anmäl dig här"}
+        </button>
+      </section>
+    </main>
+  )
 }
 
-export default MeetUp;
+export default MeetUp

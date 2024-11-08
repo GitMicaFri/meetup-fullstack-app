@@ -1,71 +1,56 @@
-.topnav{
+/* Portal.css */
+.topnav {
     overflow: hidden;
     background-color: #e9e9e9;
     border-radius: 5px;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
+
 .topnav h1 {
-    float: left;
-    display: block;
-    color: black;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
+    margin: 0;
     font-size: 20px;
-}
-
-.topnav a:hover {
-    background-color: #ddd;
     color: black;
 }
 
-.topnav a.active {
-    background-color: #2196F3;
-    color: white;
+.topnav input[type="text"] {
+    padding: 0.5rem 2rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 15px;
+    margin-right: 1rem;
 }
 
 .btn {
-    float: right;
-    margin-top: 1.5rem;
-    margin-right: 1rem;
-    padding: .5rem 2rem;
+    padding: 0.5rem 2rem;
     background-color: #fff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    margin-top: 0;
 }
 
-button:hover {
+.btn:hover {
     background-color: rgb(71, 174, 222);
     color: #fff;
 }
 
-.topnav input[type=text] {
-    float: right;
-    padding: .5rem 2rem;
-    border: none;
-    margin-top: 1.5rem;
-    margin-right: 16px;
-    font-size: 15px;
-    border-radius: 5px;
-}
-
-.Meetcontainer{
+.Meetcontainer {
     background-color: rgb(135, 193, 216);
     border-radius: 5px;
     padding: 2rem;
-    height: 600px;
+    margin-top: 2rem;
 }
 
-.name{
-    text-align: center; 
+.meetup-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
 }
-.delete-btn {
-    float: right;
-    margin-top: 1.5rem;
-    margin-right: 1rem;
-    padding: .5rem 2rem;
-    background-color: rgb(251, 130, 130);
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+
+.name {
+    text-align: center;
 }
