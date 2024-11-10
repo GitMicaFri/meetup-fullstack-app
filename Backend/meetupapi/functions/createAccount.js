@@ -9,6 +9,9 @@ module.exports.handler = async (event) => {
         if (!data.firstName || !data.lastName || !data.email || !data.password) {
             return {
                 statusCode: 400,
+                headers: {
+                    "Access-Control-Allow-Origin": "*", // Lägg till CORS-header
+                },
                 body: JSON.stringify({
                     error: 'Missing required fields'
                 })
@@ -33,6 +36,9 @@ module.exports.handler = async (event) => {
 
         return {
             statusCode: 201,
+            headers: {
+                "Access-Control-Allow-Origin": "*", // Lägg till CORS-header
+            },
             body: JSON.stringify({
                 message: 'User created successfully',
                 user: data.email
@@ -42,6 +48,9 @@ module.exports.handler = async (event) => {
     } catch (error) {
         return {
             statusCode: 500,
+            headers: {
+                "Access-Control-Allow-Origin": "*", // Lägg till CORS-header
+            },
             body: JSON.stringify({
                 error: error.message
             })

@@ -1,102 +1,112 @@
 service: meetup-backend-api
 
 provider:
-    name: aws
-    runtime: nodejs18.x
-    region: eu-north-1
-    environment:
-        USERS_TABLE: Meetup-Users
-        MEETUPS_TABLE: Meetups
-    iamRoleStatements:
-        - Effect: 'Allow'
-          Action:
-              - dynamodb:GetItem
-              - dynamodb:PutItem
-              - dynamodb:Scan
-              - dynamodb:Query
-              - dynamodb:UpdateItem
-              - dynamodb:DeleteItem
-              - dynamodb:DescribeTable
-          Resource:
-              - arn:aws:dynamodb:eu-north-1:*:table/Meetup-Users
-              - arn:aws:dynamodb:eu-north-1:*:table/Meetup-Users/index/EmailIndex
-              - arn:aws:dynamodb:eu-north-1:*:table/Meetups
+  name: aws
+  runtime: nodejs18.x
+  region: eu-north-1
+  environment:
+    USERS_TABLE: Meetup-Users
+    MEETUPS_TABLE: Meetups
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:Scan
+        - dynamodb:Query
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+        - dynamodb:DescribeTable
+      Resource:
+        - arn:aws:dynamodb:eu-north-1:*:table/Meetup-Users
+        - arn:aws:dynamodb:eu-north-1:*:table/Meetup-Users/index/EmailIndex
+        - arn:aws:dynamodb:eu-north-1:*:table/Meetups
 
 functions:
-    createAccount:
-        handler: functions/createAccount.handler
-        events:
-            - http:
-                  path: users/createAccount
-                  method: post
+  createAccount:
+    handler: functions/createAccount.handler
+    events:
+      - http:
+          path: users/createAccount
+          method: post
+          cors: true
 
-    loginAccount:
-        handler: functions/loginAccount.handler
-        events:
-            - http:
-                  path: users/loginAccount
-                  method: post
+  loginAccount:
+    handler: functions/loginAccount.handler
+    events:
+      - http:
+          path: users/loginAccount
+          method: post
+          cors: true
 
-    getAllUsers:
-        handler: functions/getAllUsers.handler
-        events:
-            - http:
-                  path: users
-                  method: get
+  getAllUsers:
+    handler: functions/getAllUsers.handler
+    events:
+      - http:
+          path: users
+          method: get
+          cors: true
 
-    createMeetup:
-        handler: functions/createMeetup.handler
-        events:
-            - http:
-                  path: meetups
-                  method: post
+  createMeetup:
+    handler: functions/createMeetup.handler
+    events:
+      - http:
+          path: meetups
+          method: post
+          cors: true
 
-    getAllMeetups:
-        handler: functions/getAllMeetups.handler
-        events:
-            - http:
-                  path: meetups
-                  method: get
+  getAllMeetups:
+    handler: functions/getAllMeetups.handler
+    events:
+      - http:
+          path: meetups
+          method: get
+          cors: true
 
-    registerForMeetup:
-        handler: functions/registerForMeetup.handler
-        events:
-            - http:
-                  path: meetups/{meetupId}/register
-                  method: post
+  registerForMeetup:
+    handler: functions/registerForMeetup.handler
+    events:
+      - http:
+          path: meetups/{meetupId}/register
+          method: post
+          cors: true
 
-    getMeetupInfoById:
-        handler: functions/getMeetupInfoById.handler
-        events:
-            - http:
-                  path: meetups/{meetupId}
-                  method: get
+  getMeetupInfoById:
+    handler: functions/getMeetupInfoById.handler
+    events:
+      - http:
+          path: meetups/{meetupId}
+          method: get
+          cors: true
 
-    getMeetupByKeyword:
-        handler: functions/getMeetupByKeyword.handler
-        events:
-            - http:
-                  path: meetups/search
-                  method: get
-                  request:
-                      parameters:
-                          querystrings:
-                              keyword: true
+  getMeetupByKeyword:
+    handler: functions/getMeetupByKeyword.handler
+    events:
+      - http:
+          path: meetups/search
+          method: get
+          cors: true
+          request:
+            parameters:
+              querystrings:
+                keyword: true
 
-    cancelMeetup:
-        handler: functions/cancelMeetup.handler
-        events:
-            - http:
-                  path: meetups/cancel
-                  method: post
+  cancelMeetup:
+    handler: functions/cancelMeetup.handler
+    events:
+      - http:
+          path: meetups/cancel
+          method: post
+          cors: true
 
-    myProfile:
-        handler: functions/myProfile.handler
-        events:
-            - http:
-                  path: users/profile
-                  method: get
-                  request:
-                      parameters:
-                          querystrings:
-                              userId: true
+  myProfile:
+    handler: functions/myProfile.handler
+    events:
+      - http:
+          path: users/profile
+          method: get
+          cors: true
+          request:
+            parameters:
+              querystrings:
+                userId: true
