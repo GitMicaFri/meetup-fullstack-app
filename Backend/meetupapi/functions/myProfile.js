@@ -1,39 +1,60 @@
-// myProfile.js
-const dynamoDB = require('../db');
+const dynamoDB = require('../db')
 
+// Huvudfunktionen för att hämta en användarprofil och dess bokade meetups baserat på användarens userId
 module.exports.handler = async (event) => {
     try {
-        const userId = event.queryStringParameters.userId;
+        const userId = event.queryStringParameters.userId
+        console.log('Fetching profile for userId:', userId)
 
         if (!userId) {
             return {
                 statusCode: 400,
-                headers: { "Access-Control-Allow-Origin": "*" },
-                body: JSON.stringify({ error: 'Missing userId' }),
+                headers: {
+                    "Access-Control-Allow-Origin": "*", // CORS-stöd
+                },
+                body: JSON.stringify({
+                    error: 'Missing userId',
+                }),
             };
         }
 
-        const profileParams = { TableName: 'Meetup-Users', Key: { userId: userId } };
-        const profileData = await dynamoDB.get(profileParams).promise();
+        // Parametrar för att hämta användarens profil från "Meetup-Users"-tabellen
+        const profileParams = {
+            TableName: 'Meetup-Users',
+            Key: { userId: userId },
+        };
+
+        const profileData = await dynamoDB.get(profileParams).promise()
 
         if (!profileData.Item) {
+            console.log('User not found:', userId)
             return {
                 statusCode: 404,
-                headers: { "Access-Control-Allow-Origin": "*" },
-                body: JSON.stringify({ error: 'User not found' }),
-            };
+                headers: {
+                    "Access-Control-Allow-Origin": "*", // CORS-stöd
+                },
+                body: JSON.stringify({
+                    error: 'User not found',
+                }),
+            }
         }
 
-        const firstName = profileData.Item.firstName;
-        const lastName = profileData.Item.lastName;
+        const firstName = profileData.Item.firstName
+        const lastName = profileData.Item.lastName
 
+        // Parametrar för att söka efter meetups där användaren är registrerad som attendee
         const meetupParams = {
             TableName: 'Meetups',
             FilterExpression: 'contains(attendees, :userId)',
-            ExpressionAttributeValues: { ':userId': userId },
+            ExpressionAttributeValues: {
+                ':userId': userId,
+            },
         };
 
-        const meetupsData = await dynamoDB.scan(meetupParams).promise();
+        console.log('DynamoDB Scan Params:', JSON.stringify(meetupParams))
+        const meetupsData = await dynamoDB.scan(meetupParams).promise()
+
+        console.log('DynamoDB Scan Result:', JSON.stringify(meetupsData))
 
         const meetups = meetupsData.Items.map((meetup) => ({
             id: meetup.id,
@@ -45,19 +66,27 @@ module.exports.handler = async (event) => {
 
         return {
             statusCode: 200,
-            headers: { "Access-Control-Allow-Origin": "*" },
+            headers: {
+                "Access-Control-Allow-Origin": "*", // CORS-stöd
+            },
             body: JSON.stringify({
                 firstName: firstName,
                 lastName: lastName,
                 meetups: meetups,
-                message: 'User profile fetched successfully',
+                message: 'User profile and meetups fetched successfully',
             }),
-        };
+        }
     } catch (error) {
+        console.error('Error fetching profile:', error);
+
         return {
             statusCode: 500,
-            headers: { "Access-Control-Allow-Origin": "*" },
-            body: JSON.stringify({ error: 'Internal Server Error' }),
-        };
+            headers: {
+                "Access-Control-Allow-Origin": "*", // CORS-stöd
+            },
+            body: JSON.stringify({
+                error: 'Internal Server Error',
+            }),
+        }
     }
-};
+}

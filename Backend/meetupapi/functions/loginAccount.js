@@ -1,4 +1,3 @@
-// loginAccount.js
 const bcrypt = require('bcryptjs');
 const dynamoDB = require('../db');
 
@@ -45,7 +44,11 @@ module.exports.handler = async (event) => {
         return {
             statusCode: 200,
             headers: { "Access-Control-Allow-Origin": "*" },
-            body: JSON.stringify({ message: 'Login successful', user: user.email }),
+            body: JSON.stringify({
+                message: 'Login successful',
+                userId: user.userId, // Returnera userId
+                email: user.email
+            }),
         };
     } catch (error) {
         return {
