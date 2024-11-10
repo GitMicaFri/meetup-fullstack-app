@@ -1,69 +1,51 @@
 import { useState, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
-import UpcomingMeetup from "../../components/MeetUp/UpcomingMeetup/UpcomfingMeetup"
+import BookedMeetup from "../../components/MeetUp/BookedMetup/BookedMetup"
 import "../Portal/portal.css"
 
 const Portal = () => {
-  const [upcomingMeetups, setUpcomingMeetups] = useState([])
+  const [bookedMeetups, setBookedMeetups] = useState([])
   const [loading, setLoading] = useState(true)
 
-  const navigate = useNavigate()
-
-  const handleLogout = () => {
-    localStorage.removeItem("authToken")
-    navigate("/")
-  }
-
   useEffect(() => {
-    const fetchMeetups = async () => {
+    const fetchBookedMeetups = async () => {
+      const userId = localStorage.getItem("userId") // Hämta userId från localStorage
+      if (!userId) {
+        console.error("User ID not found")
+        return
+      }
+
       try {
         const response = await fetch(
-          "https://pe1klf35h9.execute-api.eu-north-1.amazonaws.com/dev/meetups"
+          `https://pe1klf35h9.execute-api.eu-north-1.amazonaws.com/dev/users/profile?userId=${userId}`
         )
-        if (!response.ok) {
-          throw new Error("Något gick fel vid hämtning av meetups")
-        }
         const data = await response.json()
-        setUpcomingMeetups(data.meetups)
+
+        if (!response.ok) {
+          throw new Error(
+            data.error || "Något gick fel vid hämtning av meetups"
+          )
+        }
+
+        setBookedMeetups(data.meetups)
         setLoading(false)
       } catch (error) {
-        console.error("Error fetching meetups:", error)
+        console.error("Fel vid hämtning av meetups:", error)
         setLoading(false)
       }
     }
 
-    fetchMeetups()
+    fetchBookedMeetups()
   }, [])
 
   return (
     <main>
-      <div className="topnav">
-        <h1 className="title">Mina Sidor</h1>
-        <button className="btn" onClick={handleLogout}>
-          Logga ut
-        </button>
-        <input type="text" placeholder="Sök nya meetups..." />
-        <button className="btn" type="submit">
-          Sök
-        </button>
-      </div>
-
       <div className="Meetcontainer">
-        <h2>Kommande meetups</h2>
+        <h2>Mina bokade meetups</h2>
         {loading ? (
           <p>Laddar meetups...</p>
         ) : (
-          upcomingMeetups.map((meetup) => (
-            <UpcomingMeetup
-              key={meetup.id}
-              title={meetup.title}
-              date={meetup.scheduleDate}
-              location={meetup.location}
-              description={meetup.description}
-              onRegister={() =>
-                console.log(`Anmäler till meetup med id ${meetup.id}`)
-              }
-            />
+          bookedMeetups.map((meetup) => (
+            <BookedMeetup key={meetup.id} {...meetup} />
           ))
         )}
       </div>

@@ -1,13 +1,15 @@
-import "./Form.css"
-import { useNavigate } from "react-router-dom"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 const Form = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [error, setError] = useState(null)
   const navigate = useNavigate()
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault()
+
     try {
       const response = await fetch(
         "https://pe1klf35h9.execute-api.eu-north-1.amazonaws.com/dev/users/loginAccount",
@@ -20,17 +22,18 @@ const Form = () => {
         }
       )
 
+      const data = await response.json()
+
       if (!response.ok) {
-        throw new Error("Inloggningen misslyckades")
+        throw new Error(data.error || "Något gick fel vid inloggningen")
       }
 
-      const data = await response.json()
-      // Spara token i localStorage
-      localStorage.setItem("authToken", data.token)
+      // Spara userId i localStorage
+      localStorage.setItem("userId", data.userId)
+
       navigate("/portal")
     } catch (error) {
-      console.error("Error during login:", error)
-      alert("Fel vid inloggning, vänligen kontrollera dina uppgifter.")
+      setError(error.message)
     }
   }
 
@@ -52,6 +55,7 @@ const Form = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+        {error && <p className="error">{error}</p>}
         <button className="button" onClick={handleLogin}>
           Logga in
         </button>
