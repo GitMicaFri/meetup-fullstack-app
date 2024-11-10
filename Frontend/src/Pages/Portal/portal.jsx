@@ -76,45 +76,10 @@ const Portal = () => {
     }
   }
 
-  const handleCancel = async (meetupId) => {
-    const userId = localStorage.getItem("userId")
-    console.log("User ID:", userId) // Lägg till denna rad för att verifiera
-
-    if (!userId) {
-      console.error("User ID not found in localStorage")
-      return
-    }
-
-    try {
-      const response = await fetch(
-        `https://pe1klf35h9.execute-api.eu-north-1.amazonaws.com/dev/meetups/cancel`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            meetupId: meetupId,
-            userId: userId, // Skickar med userId
-          }),
-        }
-      )
-
-      if (!response.ok) {
-        const errorData = await response.json()
-        console.error("Error response data:", errorData) // Logga för mer detaljer
-        throw new Error(
-          errorData.error || "Failed to cancel the meetup. Please try again."
-        )
-      }
-
-      console.log("Cancellation successful!")
-      setBookedMeetups((prevMeetups) =>
-        prevMeetups.filter((meetup) => meetup.id !== meetupId)
-      )
-    } catch (error) {
-      console.error("Error cancelling meetup:", error)
-    }
+  const handleCancelSuccess = (meetupId) => {
+    setBookedMeetups((prevMeetups) =>
+      prevMeetups.filter((meetup) => meetup.id !== meetupId)
+    )
   }
 
   return (
@@ -132,7 +97,8 @@ const Portal = () => {
               date={meetup.date}
               location={meetup.location}
               description={meetup.description}
-              onCancel={() => handleCancel(meetup.id)}
+              userId={localStorage.getItem("userId")}
+              onCancelSuccess={handleCancelSuccess} // Använd callback för att uppdatera listan
             />
           ))
         ) : (
