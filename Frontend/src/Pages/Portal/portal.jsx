@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import UpcomingMeetup from "../../components/MeetUp/UpcomingMeetup/UpcomingMeetup"
 import BookedMeetup from "../../components/MeetUp/BookedMetup/BookedMetup"
-import "./Portal.css"
+import "./portal.css"
 
 const Portal = () => {
   const [bookedMeetups, setBookedMeetups] = useState([])
