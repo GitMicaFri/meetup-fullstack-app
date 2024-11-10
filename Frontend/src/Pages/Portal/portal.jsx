@@ -1,10 +1,18 @@
 import { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 import UpcomingMeetup from "../../components/MeetUp/UpcomingMeetup/UpcomfingMeetup"
 import "../Portal/portal.css"
 
 const Portal = () => {
   const [upcomingMeetups, setUpcomingMeetups] = useState([])
   const [loading, setLoading] = useState(true)
+
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken")
+    navigate("/")
+  }
 
   useEffect(() => {
     const fetchMeetups = async () => {
@@ -31,6 +39,9 @@ const Portal = () => {
     <main>
       <div className="topnav">
         <h1 className="title">Mina Sidor</h1>
+        <button className="btn" onClick={handleLogout}>
+          Logga ut
+        </button>
         <input type="text" placeholder="Sök nya meetups..." />
         <button className="btn" type="submit">
           Sök

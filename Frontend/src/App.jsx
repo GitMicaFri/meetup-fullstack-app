@@ -4,6 +4,7 @@ import Form from "./components/Form/Form"
 import RegisterForm from "./components/RegisterForm/RegisterForm"
 import Landing from "./Pages/Landing/Landing"
 import Portal from "./Pages/Portal/portal"
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute"
 
 function App() {
   return (
@@ -12,7 +13,14 @@ function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/form" element={<Form />} />
         <Route path="/register" element={<RegisterForm />} />
-        <Route path="/portal" element={<Portal />} />
+        <Route
+          path="/portal"
+          element={
+            <ProtectedRoute>
+              <Portal />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   )

@@ -1,12 +1,11 @@
-import { useState } from "react"
-import { useNavigate } from "react-router-dom"
 import "./Form.css"
+import { useNavigate } from "react-router-dom"
+import { useState } from "react"
 
 const Form = () => {
-  const navigate = useNavigate()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [error, setError] = useState("")
+  const navigate = useNavigate()
 
   const handleLogin = async () => {
     try {
@@ -22,16 +21,16 @@ const Form = () => {
       )
 
       if (!response.ok) {
-        throw new Error("Felaktig e-post eller lösenord")
+        throw new Error("Inloggningen misslyckades")
       }
 
       const data = await response.json()
-      console.log("Login successful:", data)
-
+      // Spara token i localStorage
+      localStorage.setItem("authToken", data.token)
       navigate("/portal")
     } catch (error) {
       console.error("Error during login:", error)
-      setError("Inloggning misslyckades. Kontrollera dina uppgifter.")
+      alert("Fel vid inloggning, vänligen kontrollera dina uppgifter.")
     }
   }
 
@@ -53,9 +52,6 @@ const Form = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-
-        {error && <p className="error-message">{error}</p>}
-
         <button className="button" onClick={handleLogin}>
           Logga in
         </button>
