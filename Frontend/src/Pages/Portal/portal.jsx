@@ -6,92 +6,87 @@ import "./portal.css"
 const Portal = () => {
   const [bookedMeetups, setBookedMeetups] = useState([])
   const [upcomingMeetups, setUpcomingMeetups] = useState([])
+  const [searchQuery, setSearchQuery] = useState("")
   const [loading, setLoading] = useState(true)
-
-  const fetchMeetupsData = async () => {
-    const userId = localStorage.getItem("userId")
-    if (!userId) {
-      console.error("User ID not found")
-      setLoading(false)
-      return
-    }
-
-    try {
-      const bookedResponse = await fetch(
-        `https://pe1klf35h9.execute-api.eu-north-1.amazonaws.com/dev/users/profile?userId=${userId}`
-      )
-      const upcomingResponse = await fetch(
-        `https://pe1klf35h9.execute-api.eu-north-1.amazonaws.com/dev/meetups`
-      )
-
-      const bookedData = await bookedResponse.json()
-      const upcomingData = await upcomingResponse.json()
-
-      if (!bookedResponse.ok || !upcomingResponse.ok) {
-        throw new Error(
-          bookedData.error || upcomingData.error || "Failed to fetch meetups"
-        )
-      }
-
-      setBookedMeetups(bookedData.meetups)
-      setUpcomingMeetups(upcomingData.meetups)
-    } catch (error) {
-      console.error("Error fetching meetups data:", error)
-    } finally {
-      setLoading(false)
-    }
-  }
+  const [searchResults, setSearchResults] = useState([])
 
   useEffect(() => {
+    const fetchMeetupsData = async () => {
+      const userId = localStorage.getItem("userId")
+      if (!userId) {
+        console.error("User ID not found")
+        setLoading(false)
+        return
+      }
+
+      try {
+        const bookedResponse = await fetch(
+          `https://pe1klf35h9.execute-api.eu-north-1.amazonaws.com/dev/users/profile?userId=${userId}`
+        )
+        const upcomingResponse = await fetch(
+          `https://pe1klf35h9.execute-api.eu-north-1.amazonaws.com/dev/meetups`
+        )
+
+        const bookedData = await bookedResponse.json()
+        const upcomingData = await upcomingResponse.json()
+
+        if (!bookedResponse.ok || !upcomingResponse.ok) {
+          throw new Error(
+            bookedData.error || upcomingData.error || "Failed to fetch meetups"
+          )
+        }
+
+        setBookedMeetups(bookedData.meetups)
+        setUpcomingMeetups(upcomingData.meetups)
+      } catch (error) {
+        console.error("Error fetching meetups data:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
     fetchMeetupsData()
   }, [])
 
-  const handleRegister = async (meetupId) => {
-    const userId = localStorage.getItem("userId")
-    if (!userId) {
-      console.error("User ID not found in localStorage")
+  const handleSearch = async (e) => {
+    const query = e.target.value
+    setSearchQuery(query)
+
+    if (query.trim() === "") {
+      setSearchResults([])
       return
     }
 
     try {
       const response = await fetch(
-        `https://pe1klf35h9.execute-api.eu-north-1.amazonaws.com/dev/meetups/${meetupId}/register`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ meetupId, userId }),
-        }
+        `https://pe1klf35h9.execute-api.eu-north-1.amazonaws.com/dev/meetups/search?keyword=${encodeURIComponent(
+          query
+        )}`
       )
-
-      const responseData = await response.json()
-      console.log("Response data:", responseData)
+      const data = await response.json()
 
       if (!response.ok) {
-        if (responseData.message === "User already registered") {
-          alert("Du är redan anmäld till denna meetup.")
-        } else {
-          throw new Error(responseData.error || "Anmälan misslyckades")
-        }
-      } else {
-        console.log("Anmälan lyckades!")
-        // Hämta de uppdaterade bokade meetups direkt
-        await fetchMeetupsData()
+        throw new Error(data.error || "Sökningen misslyckades")
       }
-    } catch (error) {
-      console.error("Fel vid anmälan:", error)
-    }
-  }
 
-  const handleCancelSuccess = (meetupId) => {
-    setBookedMeetups((prevMeetups) =>
-      prevMeetups.filter((meetup) => meetup.id !== meetupId)
-    )
+      setSearchResults(data.meetups)
+    } catch (error) {
+      console.error("Fel vid sökning av meetups:", error)
+      setSearchResults([])
+    }
   }
 
   return (
     <main>
+      <div className="search-container">
+        <input
+          type="text"
+          placeholder="Sök efter meetups..."
+          value={searchQuery}
+          onChange={handleSearch}
+          className="search-bar"
+        />
+      </div>
       <div className="Meetcontainer">
         <h2>Mina bokade meetups</h2>
         {loading ? (
@@ -105,12 +100,28 @@ const Portal = () => {
               date={meetup.date}
               location={meetup.location}
               description={meetup.description}
-              userId={localStorage.getItem("userId")}
-              onCancelSuccess={handleCancelSuccess}
             />
           ))
         ) : (
           <p>Inga bokade meetups hittades.</p>
+        )}
+      </div>
+
+      <div className="Meetcontainer">
+        <h2>Sökresultat</h2>
+        {searchResults.length > 0 ? (
+          searchResults.map((meetup) => (
+            <UpcomingMeetup
+              key={meetup.id}
+              meetupId={meetup.id}
+              title={meetup.title}
+              date={meetup.scheduleDate}
+              location={meetup.location}
+              description={meetup.description}
+            />
+          ))
+        ) : (
+          <p>Inga resultat för din sökning.</p>
         )}
       </div>
 
@@ -127,7 +138,6 @@ const Portal = () => {
               date={meetup.scheduleDate}
               location={meetup.location}
               description={meetup.description}
-              onRegister={() => handleRegister(meetup.id)}
             />
           ))
         )}
