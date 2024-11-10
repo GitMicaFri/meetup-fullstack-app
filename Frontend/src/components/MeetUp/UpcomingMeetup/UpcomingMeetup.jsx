@@ -1,4 +1,5 @@
 import React from "react"
+import { useNavigate } from "react-router-dom"
 import "./UpcomingMeetup.css"
 
 const UpcomingMeetup = ({
@@ -10,6 +11,8 @@ const UpcomingMeetup = ({
   userId,
   onRegister,
 }) => {
+  const navigate = useNavigate()
+
   const handleRegister = async (meetupId) => {
     const userId = localStorage.getItem("userId")
 
@@ -37,7 +40,6 @@ const UpcomingMeetup = ({
       console.log("Response data:", responseData)
 
       if (!response.ok) {
-        // Kontrollera om meddelandet är "User already registered" och hantera det.
         if (responseData.message === "User already registered") {
           alert("Du är redan anmäld till denna meetup.")
         } else {
@@ -45,10 +47,16 @@ const UpcomingMeetup = ({
         }
       } else {
         console.log("Anmälan lyckades!")
+        // Valfritt: Uppdatera frontend efter framgångsrik registrering
+        onRegister && onRegister()
       }
     } catch (error) {
       console.error("Fel vid anmälan:", error)
     }
+  }
+
+  const handleDetailsClick = () => {
+    navigate(`/meetup/${meetupId}`)
   }
 
   return (
@@ -57,9 +65,17 @@ const UpcomingMeetup = ({
       <p>Datum: {date}</p>
       <p>Plats: {location}</p>
       <p>Beskrivning: {description}</p>
-      <button className="register-btn" onClick={() => handleRegister(meetupId)}>
-        Anmäl dig
-      </button>
+      <div className="button-container">
+        <button className="details-btn" onClick={handleDetailsClick}>
+          Visa detaljer
+        </button>
+        <button
+          className="register-btn"
+          onClick={() => handleRegister(meetupId)}
+        >
+          Anmäl dig
+        </button>
+      </div>
     </div>
   )
 }

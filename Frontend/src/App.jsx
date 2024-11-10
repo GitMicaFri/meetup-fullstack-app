@@ -5,6 +5,7 @@ import RegisterForm from "./components/RegisterForm/RegisterForm"
 import Landing from "./Pages/Landing/Landing"
 import Portal from "./Pages/Portal/portal"
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute"
+import MeetupDetails from "./components/MeetUp/MeetupDetails/MeetupDetails"
 
 function App() {
   return (
@@ -18,6 +19,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Portal />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/meetup/:meetupId"
+          element={
+            <ProtectedRoute>
+              <MeetupDetails />
             </ProtectedRoute>
           }
         />

@@ -1,9 +1,10 @@
+// ProtectedRoute.js
 import { Navigate } from "react-router-dom"
 
 const ProtectedRoute = ({ children }) => {
-  const token = localStorage.getItem("authToken")
+  const userId = localStorage.getItem("userId")
 
-  if (!token) {
+  if (!userId) {
     return <Navigate to="/" replace />
   }
 
