@@ -1,4 +1,4 @@
-name: Deploy to Dev Environment
+name: Deploy to S3 (Dev Environment)
 
 on:
   push:
@@ -6,32 +6,44 @@ on:
       - dev
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Check out the code
+      - name: Check out code
         uses: actions/checkout@v2
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: "18"
+          node-version: "18" # Uppdaterad till Node.js version 18
 
       - name: Install dependencies
-        working-directory: frontend
+        working-directory: Frontend
         run: npm install
 
-      - name: Build the app
-        working-directory: frontend
+      - name: Build project
+        working-directory: Frontend
         run: npm run build
 
-      - name: Deploy to S3
-        uses: jakejarvis/s3-sync-action@v0.5.1
-        with:
-          args: --acl public-read --follow-symlinks --delete
+      - name: Check and install AWS CLI
+        run: |
+          if ! command -v aws &> /dev/null; then
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+          else
+            echo "AWS CLI already installed, updating..."
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install --update
+          fi
+
+      - name: Deploy to S3 Dev
+        if: github.ref == 'refs/heads/dev'
         env:
+          AWS_REGION: eu-north-1 # Uppdaterad till regionen eu-north-1
           AWS_S3_BUCKET: ${{ secrets.AWS_DEV_BUCKET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: "eu-north-1"
+        run: |
+          aws s3 sync Frontend/dist/ s3://$AWS_S3_BUCKET --delete

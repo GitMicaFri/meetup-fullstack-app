@@ -1,0 +1,47 @@
+/* UpcomingMeetup.css */
+.upcoming-meetup {
+  background-color: #f0f8ff;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.upcoming-meetup:hover {
+  transform: scale(1.02);
+}
+
+.upcoming-meetup h3 {
+  color: #333;
+}
+
+.upcoming-meetup p {
+  margin: 5px 0;
+  color: #555;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.details-btn,
+.register-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  background-color: #87c1d8; /* Teal/blå nyans */
+  color: #000; /* Svart text */
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.details-btn:hover,
+.register-btn:hover {
+  background-color: #5da5b4; /* Mörkare teal/blå nyans vid hover */
+  color: #000;
+}
