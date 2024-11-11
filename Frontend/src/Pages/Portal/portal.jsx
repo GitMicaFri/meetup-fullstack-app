@@ -48,6 +48,13 @@ const Portal = () => {
     fetchMeetupsData()
   }, [])
 
+  // Funktion för att hantera avbokning
+  const handleCancelSuccess = (cancelledMeetupId) => {
+    setBookedMeetups((prevMeetups) =>
+      prevMeetups.filter((meetup) => meetup.id !== cancelledMeetupId)
+    )
+  }
+
   const handleSearch = async (e) => {
     const query = e.target.value
     setSearchQuery(query)
@@ -87,6 +94,7 @@ const Portal = () => {
           className="search-bar"
         />
       </div>
+
       <div className="Meetcontainer">
         <h2>Mina bokade meetups</h2>
         {loading ? (
@@ -100,6 +108,8 @@ const Portal = () => {
               date={meetup.date}
               location={meetup.location}
               description={meetup.description}
+              userId={localStorage.getItem("userId")}
+              onCancelSuccess={handleCancelSuccess}
             />
           ))
         ) : (
