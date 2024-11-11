@@ -1,0 +1,54 @@
+.title {
+    text-align: center;
+}
+
+.subtitle {
+    color: #fff;
+    text-align: center;
+}
+
+.section {
+    background-color: rgb(135, 193, 216);
+    border-radius: 1rem;
+    padding: 2rem 0;
+}
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 3rem 2rem 3rem;
+    gap: 1rem;
+}
+.input {
+    padding: .5rem 10rem .5rem .3rem;
+    border: none;
+    border-radius: 5px;
+}
+.register-btn {
+    color: #fff;
+    cursor: pointer;
+    text-decoration: underline;
+}
+.button {
+    padding: .5rem 2rem;
+    background-color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.button:hover {
+    background-color: rgb(71, 174, 222);
+    color: #fff;
+}
+
+.register-text {
+    margin-top: 1rem;
+    text-align: center;
+    font-size: 1rem;
+  }
+  .register-text a {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  
