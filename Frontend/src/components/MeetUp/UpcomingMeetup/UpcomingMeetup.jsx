@@ -10,6 +10,7 @@ const UpcomingMeetup = ({
   meetupId,
   userId,
   onRegister,
+  onRegisterSuccess,
 }) => {
   const navigate = useNavigate()
 
@@ -47,8 +48,8 @@ const UpcomingMeetup = ({
         }
       } else {
         console.log("Anmälan lyckades!")
-        // Valfritt: Uppdatera frontend efter framgångsrik registrering
-        onRegister && onRegister()
+
+        window.location.reload()
       }
     } catch (error) {
       console.error("Fel vid anmälan:", error)

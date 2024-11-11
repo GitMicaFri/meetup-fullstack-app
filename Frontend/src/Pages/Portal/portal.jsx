@@ -83,6 +83,10 @@ const Portal = () => {
     }
   }
 
+  const handleRegisterSuccess = (newMeetup) => {
+    setBookedMeetups((prevMeetups) => [...prevMeetups, newMeetup])
+  }
+
   return (
     <main>
       <div className="search-container">
@@ -128,6 +132,7 @@ const Portal = () => {
               date={meetup.scheduleDate}
               location={meetup.location}
               description={meetup.description}
+              onRegisterSuccess={handleRegisterSuccess}
             />
           ))
         ) : (
