@@ -39,8 +39,7 @@ module.exports.handler = async (event) => {
             }
         }
 
-        const firstName = profileData.Item.firstName
-        const lastName = profileData.Item.lastName
+        const { firstName, lastName, email } = profileData.Item
 
         // Parametrar för att söka efter meetups där användaren är registrerad som attendee
         const meetupParams = {
@@ -72,6 +71,7 @@ module.exports.handler = async (event) => {
             body: JSON.stringify({
                 firstName: firstName,
                 lastName: lastName,
+                email: email,
                 meetups: meetups,
                 message: 'User profile and meetups fetched successfully',
             }),
