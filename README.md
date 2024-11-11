@@ -1,6 +1,24 @@
 # meetup-fullstack-app
 Gruppuppgift PluggingHorses
 Gruppexamination: CI / CD.
+__________________________________________________________________________________________________
+Arbetsgång:
+-Vi delade upp vårt arbete med två personer i frontend och två personer i backend till en början.
+-Mot slutet har vi jobbat tillsammans för att synka alla delar, några justeringar har gjorts.
+
+-Vi har använt oss av AWS-tjänsterna: DynamoDB, API-gateways och S3 buckets.
+
+-Allt är synkat via Github actions: Se yml-filen.
+
+-I backend har vi använt Serverless
+-I frontend har vi använt React
+
+-Vår backlog i girhub projects: https://github.com/users/GitMicaFri/projects/3/views/1
+
+-Länk till production bucket: http://meetup-app-production.s3-website.eu-north-1.amazonaws.com 
+-Länk till dev bucket: http://meetup-app-dev.s3-website.eu-north-1.amazonaws.com 
+_____________________________________________________________________________________________
+
 Bakgrund
 I denna gruppexamination ska ni bygga en fullstack-app för kunna se och anmäla sig till meetups.
 
