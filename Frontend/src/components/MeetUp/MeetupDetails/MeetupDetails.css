@@ -44,3 +44,18 @@
     background-color: rgb(71, 174, 222);
     color: #fff;
 }
+
+.back-button {
+    padding: 0.5rem 1.5rem;
+    background-color: #87c1d8; /* Anpassad färg */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 1rem;
+  }
+  
+  .back-button:hover {
+    background-color: #5da5b4; /* Mörkare färg vid hover */
+    color: #fff;
+  }
+  

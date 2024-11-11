@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import "./MeetupDetails.css"
 
 const MeetupDetails = () => {
+  const navigate = useNavigate()
   const { meetupId } = useParams()
   const [meetup, setMeetup] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -65,6 +66,9 @@ const MeetupDetails = () => {
       <p>
         <strong>Antal lediga platser:</strong> {meetup.availableSeats}
       </p>
+      <button className="back-button" onClick={() => navigate("/portal")}>
+        Tillbaka
+      </button>
     </div>
   )
 }
