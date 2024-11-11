@@ -9,8 +9,42 @@ const Portal = () => {
   const [searchQuery, setSearchQuery] = useState("")
   const [loading, setLoading] = useState(true)
   const [searchResults, setSearchResults] = useState([])
+  const [userProfile, setUserProfile] = useState(null)
 
   useEffect(() => {
+    const fetchUserProfile = async () => {
+      const userId = localStorage.getItem("userId")
+
+      if (!userId) {
+        console.error("User ID not found")
+        setLoading(false)
+        return
+      }
+
+      try {
+        const response = await fetch(
+          `https://pe1klf35h9.execute-api.eu-north-1.amazonaws.com/dev/users/profile?userId=${userId}`
+        )
+        const profileData = await response.json()
+
+        console.log("Profile data fetched: ", profileData)
+
+        if (response.ok && profileData) {
+          setUserProfile({
+            firstName: profileData.firstName,
+            lastName: profileData.lastName,
+            email: profileData.email,
+          })
+        } else {
+          console.error("Failed to fetch user profile: ", profileData.error)
+        }
+      } catch (error) {
+        console.error("Error fetching user profile: ", error)
+      }
+    }
+
+    fetchUserProfile()
+
     const fetchMeetupsData = async () => {
       const userId = localStorage.getItem("userId")
       if (!userId) {
@@ -89,6 +123,14 @@ const Portal = () => {
 
   return (
     <main>
+      {userProfile && (
+        <div className="profile-container">
+          <h2>
+            Välkommen, {userProfile.firstName} {userProfile.lastName}!
+          </h2>
+          <p>Email: {userProfile.email}</p>
+        </div>
+      )}
       <div className="search-container">
         <input
           type="text"
