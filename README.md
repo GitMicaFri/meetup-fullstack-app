@@ -51,3 +51,5 @@ För Väl Godkänt:
 
 Alla kriterier för Godkänt
 Implementerat alla user stories för Väl Godkänt
+
+https://deepwiki.com/GitMicaFri/meetup-fullstack-app 
